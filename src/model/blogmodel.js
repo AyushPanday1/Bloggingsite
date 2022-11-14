@@ -34,7 +34,7 @@ const blogmodel = new mongoose.Schema({
         type:Boolean,
         default:false
     },
-    published_at: Date.now()
+   // published_at: Date.now()
 
 },{timestamps:true})
 
