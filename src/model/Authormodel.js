@@ -28,7 +28,7 @@ const Authormodel = new mongoose.Schema({
        trim: true,
        lowercase: true,
        unique: true,
-       required: 'Email address is required',
+       required: true,
        validate: [validateEmail, 'Please fill a valid email address'],
        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
      },
