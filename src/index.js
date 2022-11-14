@@ -8,7 +8,7 @@ const app = express();
 
 app.use('/' , route);
 
-mongoose.connect("" ,{
+mongoose.connect("mongodb+srv://AyushPanday:AyushPan123@cluster0.eixapeq.mongodb.net/?retryWrites=true&w=majority" ,{
     useNewUrlparser :true
 })
 .then(()=>console.log("Mongodb is Connected"))
