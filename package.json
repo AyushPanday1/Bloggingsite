@@ -1,0 +1,26 @@
+{
+  "name": "project1",
+  "version": "1.0.0",
+  "description": "First project",
+  "main": "index.js",
+  "scripts": {
+    "test": "git"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vikasgautam1234/project-1-bloging.git"
+  },
+  "keywords": [
+    "git"
+  ],
+  "author": "Ayush",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vikasgautam1234/project-1-bloging/issues"
+  },
+  "homepage": "https://github.com/vikasgautam1234/project-1-bloging#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^6.7.2"
+  }
+}
