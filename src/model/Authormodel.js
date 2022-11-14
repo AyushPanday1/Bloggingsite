@@ -19,6 +19,7 @@ const Authormodel = new mongoose.Schema({
 
      title: {
        required : true,
+       type : String,
        enum : ["Mr" , "Mrs" , "Miss"]
      },
 
@@ -27,9 +28,9 @@ const Authormodel = new mongoose.Schema({
        trim: true,
        lowercase: true,
        unique: true,
-       required: true,
-       validate: [validateEmail, 'Please fill a valid email address'],
-       match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
+        required: true,
+        validate: [validateEmail, 'Please fill a valid email address'],
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
      },
 
      password: {
@@ -37,4 +38,4 @@ const Authormodel = new mongoose.Schema({
        type:String
      }}, {timestamps:true})
 
-module.exports = mongoose.model("Author" , Authormodel)
+module.exports = mongoose.model("Author123" , Authormodel)
