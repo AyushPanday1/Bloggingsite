@@ -23,7 +23,6 @@ const Authormodel = new mongoose.Schema({
      },
 
      email : {
-       unique:true,
        type: String,
        trim: true,
        lowercase: true,
