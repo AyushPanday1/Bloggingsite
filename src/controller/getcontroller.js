@@ -4,32 +4,35 @@ const blogModel = require('../model/blogmodel.js')
 const getBlog = async function (req, res) {
  try {
     const { authorID, category, tags, subcategory } = req.query
-        let obj1 = {
-            isDeleted: false,
-            isPublished: true,
+       
+    let data = {
+          
+        isDeleted: false,
+        isPublished: true,
+        
         }
         if (authorID) {
-            obj1.authorID = authorID
+            data.authorID = authorID
         }
         if (category) {
-            obj1.category = category
+            data.category = category
         }
 
         if (tags) {
-            obj1.tags = tags
+            data.tags = tags
         }
         if (subcategory) {
-            obj1.subcategory = subcategory
+            data.subcategory = subcategory
         }
 
 
-        const result = await blogModel.find(obj1)
+        const result = await blogModel.find(data) 
 
         if (result) {
             res.status(201).send({ msg: result })
         }
         else {
-            res.status(404).send({ msg: "Nothing Found" })
+            res.status(404).send({ msg: "No data found" })
         }
 
     }
