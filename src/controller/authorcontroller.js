@@ -1,7 +1,9 @@
 const Authormodel = require('../model/Authormodel')
 
+
 const createAuthor = async function(req,res){
-    try{
+
+try{
 const authorInfo = req.body
 const data = await Authormodel.create(authorInfo)
 res.status(201).send({msg : data})
@@ -9,7 +11,6 @@ res.status(201).send({msg : data})
 
 catch(err){
     res.status(500).send({msg : err.message})
-
 }
 }
 

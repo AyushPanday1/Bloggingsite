@@ -34,8 +34,9 @@ const Authormodel = new mongoose.Schema({
      },
 
      password: {
-        required:true,
+       required:true,
        type:String
      }}, {timestamps:true})
 
+     
 module.exports = mongoose.model("Author123" , Authormodel)

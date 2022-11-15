@@ -15,7 +15,7 @@ const blogmodel = new mongoose.Schema({
     authorID: {
         required: true,
         type: ObjectId, 
-        ref:"Author"
+        ref:"Author123"
     },
     tags: [ { type: String } ],
     category:{
@@ -34,7 +34,7 @@ const blogmodel = new mongoose.Schema({
         type:Boolean,
         default:false
     },
-   // published_at: Date.now()
+  //  published_at: new Date()
 
 },{timestamps:true})
 

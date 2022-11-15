@@ -5,11 +5,11 @@ const mongoose = require('mongoose');
 const route = require('./routes/route')
 
 const app = express();
+
+
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-
 
 app.use('/' , route);
 
