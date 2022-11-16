@@ -1,7 +1,5 @@
-const Authormodel = require('../model/Authormodel')
-// const mongoose = require('mongoose');
-const { isValidObjectId } = require("mongoose");
-const { findById } = require('../model/Authormodel');
+const Authormodel = require('../model/Authormodel')        // Importing Authormodel for using in this controller module.
+
 
 //1st-- Author API-------------------------------------------------------------------------------------------
 const createAuthor = async function (req, res) {
@@ -17,5 +15,4 @@ const createAuthor = async function (req, res) {
     }
 }
 
-
-module.exports.createAuthor = createAuthor
+module.exports.createAuthor = createAuthor                 // Exporting module for using in router.

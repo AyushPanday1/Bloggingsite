@@ -1,11 +1,8 @@
-const Authormodel = require('../model/Authormodel')
-// const mongoose = require('mongoose');
-const { isValidObjectId } = require("mongoose");
-const { findById } = require('../model/Authormodel');
-const blogModel = require('../model/blogmodel')
+const Authormodel = require('../model/Authormodel')             // Importing Authormodel from authormodel.js module
+const blogModel = require('../model/blogmodel')                 // Importing blogmodel   from  blogmodel.js  module
 
-
-
+const mongoose = require('mongoose')
+const { isValidObjectId } = require("mongoose");                // Inbuilt function of mongoose to check any id is valid object id or not
 
 
 //2nd- post API------------------------------------------------------------------------------------------------
@@ -18,6 +15,8 @@ const createBlog = async function (req, res) {
         if (!authorID) {
             return res.status(400).send({ status: false, msg: "AuthorId must be present" })
         }
+
+        // Checking author id is valid or not ---------------------------------------------------------------
         if (!isValidObjectId(authorID)) {
             return res.send("authorid is not valid")
         }
@@ -36,10 +35,13 @@ const createBlog = async function (req, res) {
 };
 
 
+
 //3rd- get blog API---------------------------------------------------------------------------------------
 
 const getBlog = async function (req, res) {
     try {
+
+        // Taking all queries in one object to reduce time  --------------------------------------------
         const { authorID, category, tags, subcategory } = req.query
 
         let data = {
@@ -62,7 +64,6 @@ const getBlog = async function (req, res) {
             data.subcategory = subcategory
         }
 
-
         const result = await blogModel.find(data)
 
         if (result) {
@@ -71,7 +72,6 @@ const getBlog = async function (req, res) {
         else {
             res.status(404).send({ msg: "No data found" })
         }
-
     }
     catch (error) {
         res.status(500).send({ msg: error.message })
@@ -88,14 +88,23 @@ const updateAllBlogs = async function (req, res) {
         if (!isValidObjectId(blogId1)) {
             return res.send("BlogId is not valid")
         }
+
+        // Available is checking that the wanted data is available in our database or not--------------
         let available = await blogmodel.findById(blogId1)
         if (!available) {
             return res.status(400).send({ status: false, msg: "BlogId not found" })
         }
+
+        // Taking all attributes in one object to reduce time -----------------------------------------
+
         const { title, body, tags, subcategory } = req.body
+
         const findBlog = await blogmodel.findById(blogId1)
+
         const tagsData = findBlog.tags
         const subcategryData = findBlog.subcategory
+         
+        // Adding New tags and subcategories in previous existing data(arrays)-----------------------
         tagsData.push(tags)
         subcategryData.push(subcategory)
 
@@ -126,21 +135,27 @@ const updateAllBlogs = async function (req, res) {
 const deleteBlog = async function (req, res) {
     try {
         const blogId = req.params.blogId
+
+
         if (!isValidObjectId(blogId)) {
             res.status(400).send({ msg: "invalid blogId" })
         }
+
         let blog = await blogmodel.find({ isDeleted: false, _id: blogId })
+
         if (!blog) {
             return res.status(400).send({ status: false, msg: "BlogId not found" })
         }
-
-        let saveData = await blogmodel.updateOne({ isDeleted: false, _id: blogId }, { isDeleted: true }, { new: true })  //in this line first we find the isdeleted:false & then we update it
+        
+        // beFore updating we pass the conditions that data should not be deleted and returning the updated data using new:true.
+        let saveData = await blogmodel.updateOne({ isDeleted: false, _id: blogId }, { isDeleted: true }, { new: true })  
         res.status(200).send({ msg: saveData })
     }
     catch (err) {
         res.status(500).send({ msg: err.message })
     }
 }
+
 
 
 // 6th -DELETE /blogs?queryParams---------------------------------------------------------------------------
@@ -151,33 +166,43 @@ const DeleteByQuery = async function (req, res) {
 
 
         let { authorID, tags, category, subcategory, isPublished } = data
+
+        // As in the above data only author id is object id so validating it-----------------------------
         if(!isValidObjectId(authorID)) return res.send({msg:"Authorid is in valid"})
 
         if (!(authorID || tags || category || subcategory || isPublished)) {
             return res.status(400).send({ status: false, msg: "Please pass any query" })
         }
         
-
+        // $or means if any of the condition matches --------------------------------------------------
         let blog = await blogmodel.findOne({ $or: [{ authorID: authorID }, { tags: tags }, { category: category }, { subcategory: subcategory }, { isPublished: isPublished }] })
 
         if (!blog) return res.status(404).send({ status: false, msg: "False" })
+        
 
+        //Before updating firstly we are checking it if data is deleted or not so only passing not deleted data--------------
         let blogDetails = await blogmodel.updateMany({ $and: [{ isDeleted: false }, { $or: [{ authorID: authorID }, { tags: tags }, { category: category }, { subcategory: subcategory }, { isPublished: isPublished }] }] },
             { $set: { isDeleted: true } })
 
         if (blogDetails.modifiedCount == 0 || blogDetails.matchedCount == 0) {
             return res.status(404).send({ status: false, msg: "No blog found" })
         }
+        
 
+        // We don't have to send the updated data as it is a delete api so only sending message --------------------------
         res.status(200).send({ status: true, msg: "Blog deleted" })
 
-    } catch (error) {
+    } 
+    catch (error) {
         res.status(500).send({ msg: error.message })
     }
 }
 
-module.exports.getBlog = getBlog
+
+// Exporting all the functions from here -------------------------------------------------------------
+
 module.exports.createBlog=createBlog;
-module.exports.DeleteByQuery = DeleteByQuery
-module.exports.deleteBlog = deleteBlog
+module.exports.getBlog = getBlog
 module.exports.updateAllBlogs = updateAllBlogs
+module.exports.deleteBlog = deleteBlog
+module.exports.DeleteByQuery = DeleteByQuery

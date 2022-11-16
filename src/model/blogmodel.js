@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
-const ObjectId = mongoose.Schema.Types.ObjectId;
+const ObjectId = mongoose.Schema.Types.ObjectId;         // Declaring this as object id contains characters as well as digits too-----
 
 const blogmodel = new mongoose.Schema({
      
     title:{
-        required:true,
+        required:true,                                 
         type:String
     },
     body:{
@@ -15,17 +15,18 @@ const blogmodel = new mongoose.Schema({
     authorID : {
         required: true,
         type: ObjectId, 
-        ref:"Author123"
+        ref:"Author123"                                // Refrence to author model database-----------
     },
+
     tags: [ { type: String } ],
+
     category:{
         type:String,
         required:true
     },
-    subcategory:{
-        type:[{type:String}],
 
-    },
+    subcategory:[{type:String}],                      // Array of strings--------------------------
+
     isDeleted:{
         type:Boolean,
         default:false
@@ -38,4 +39,4 @@ const blogmodel = new mongoose.Schema({
 
 },{timestamps:true})
 
-module.exports = mongoose.model("Blog" , blogmodel)
+module.exports = mongoose.model("Blog" , blogmodel)      // Exporting the model for allowing crud operations in different modules------
