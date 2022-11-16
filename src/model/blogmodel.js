@@ -12,7 +12,7 @@ const blogmodel = new mongoose.Schema({
         required:true,
         type:String
     },
-    authorID: {
+    authorID : {
         required: true,
         type: ObjectId, 
         ref:"Author123"
@@ -34,7 +34,7 @@ const blogmodel = new mongoose.Schema({
         type:Boolean,
         default:false
     },
-  //  published_at: new Date()
+   published_at: Date
 
 },{timestamps:true})
 
