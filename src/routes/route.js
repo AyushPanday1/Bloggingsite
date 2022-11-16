@@ -13,6 +13,8 @@ router.get('/firstapi' , function(req,res){
 // First router for creating author --------------
 router.post('/authors', authorController.createAuthor)
 
+router.post('/login',authorController.login)
+
 
 // Second router for creating blog----------------
 router.post('/blogs',blogController.createBlog)

@@ -21,6 +21,7 @@
   "homepage": "https://github.com/vikasgautam1234/project-1-bloging#readme",
   "dependencies": {
     "express": "^4.18.2",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.7.2"
   }
 }

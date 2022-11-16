@@ -1,5 +1,5 @@
 const Authormodel = require('../model/Authormodel')        // Importing Authormodel for using in this controller module.
-
+const jwt = require('jsonwebtoken')
 
 //1st-- Author API-------------------------------------------------------------------------------------------
 const createAuthor = async function (req, res) {
@@ -15,4 +15,32 @@ const createAuthor = async function (req, res) {
     }
 }
 
-module.exports.createAuthor = createAuthor                 // Exporting module for using in router.
+const login = async function (req, res) {
+    let userName = req.body.email;
+    let password = req.body.password;
+    try {
+        let author = await Authormodel.findOne({ email: userName, password: password });
+        if (!author)
+            return res.status(400).send({
+                status: false,
+                msg: "username or the password is not corerct",
+            });
+
+
+        let token = jwt.sign(
+            {
+                userId: author._id.toString(),
+                batch: "Lithium",
+                project: "project1",
+            },
+            "functionup-secret-key"
+        );
+        res.setHeader("x-api-key", token);
+        res.status(200).send({ status: true, msg: "Successful-login-Response-structure", data: token });
+    } catch (Err) {
+        return res.status(400).send({ status: false, msg: "username or password is not correct" });
+    }
+};
+
+module.exports.createAuthor = createAuthor 
+module.exports.login = login                // Exporting module for using in router.
