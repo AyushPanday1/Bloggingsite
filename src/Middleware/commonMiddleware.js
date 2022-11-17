@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 
+// Validating and authenticating the id ------------------------------------------------------------------
 
 const authentication = function (req, res, next) {
     try {
