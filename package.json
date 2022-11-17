@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vikasgautam1234/project-1-bloging.git"
+    "url": "git+https://github.com/AyushPanday1/project-1-bloggingsite.git"
   },
   "keywords": [
     "git"
@@ -16,9 +16,9 @@
   "author": "Ayush",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/vikasgautam1234/project-1-bloging/issues"
+    "url": "https://github.com/AyushPanday1/project-1-bloggingsite.git#issues"
   },
-  "homepage": "https://github.com/vikasgautam1234/project-1-bloging#readme",
+  "homepage": "https://github.com/AyushPanday1/project-1-bloggingsite.git#readme",
   "dependencies": {
     "express": "^4.18.2",
     "jsonwebtoken": "^8.5.1",
