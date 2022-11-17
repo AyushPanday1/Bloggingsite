@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 
-// Passing a function to validate email in schema---------------------------
+// Passing a function to validate email in schema--------------------------
 
 var validateEmail = function(email) {                 
    var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
