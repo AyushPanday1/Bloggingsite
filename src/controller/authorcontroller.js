@@ -1,6 +1,7 @@
 const Authormodel = require('../model/Authormodel')        // Importing Authormodel for using in this controller module.
 const jwt = require('jsonwebtoken')
 
+
 //1st-- Author API-------------------------------------------------------------------------------------------
 const createAuthor = async function (req, res) {
 
@@ -16,6 +17,7 @@ const createAuthor = async function (req, res) {
 }
 
 
+// Api for login of user and creating a json web token (jwt)------------------------------------------------
 const login = async function (req, res) {
     let email = req.body.email;
     let password = req.body.password;
