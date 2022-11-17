@@ -90,7 +90,7 @@ const updateAllBlogs = async function (req, res) {
         }
 
         // Available is checking that the wanted data is available in our database or not--------------
-        let available = await blogmodel.findById(blogId1)
+        let available = await blogModel.findById(blogId1)
         if (!available) {
             return res.status(400).send({ status: false, msg: "BlogId not found" })
         }
@@ -99,7 +99,7 @@ const updateAllBlogs = async function (req, res) {
 
         const { title, body, tags, subcategory } = req.body
 
-        const findBlog = await blogmodel.findById(blogId1)
+        const findBlog = await blogModel.findById(blogId1)
 
         const tagsData = findBlog.tags
         const subcategryData = findBlog.subcategory
@@ -109,7 +109,7 @@ const updateAllBlogs = async function (req, res) {
         subcategryData.push(subcategory)
 
 
-        const blogData = await blogmodel.findByIdAndUpdate(blogId1, {
+        const blogData = await blogModel.findByIdAndUpdate(blogId1, {
             $set: {
                 title: title,
                 body: body,
@@ -141,14 +141,14 @@ const deleteBlog = async function (req, res) {
             res.status(400).send({ msg: "invalid blogId" })
         }
 
-        let blog = await blogmodel.find({ isDeleted: false, _id: blogId })
+        let blog = await blogModel.find({ isDeleted: false, _id: blogId })
 
         if (!blog) {
-            return res.status(400).send({ status: false, msg: "BlogId not found" })
+            return res.status(400).send({ status: false, msg: "Blog not found" })
         }
         
         // beFore updating we pass the conditions that data should not be deleted and returning the updated data using new:true.
-        let saveData = await blogmodel.updateOne({ isDeleted: false, _id: blogId }, { isDeleted: true }, { new: true })  
+        let saveData = await blogModel.updateOne({ isDeleted: false, _id: blogId }, {$set :{isDeleted: true }}, { new: true })  
         res.status(200).send({ msg: saveData })
     }
     catch (err) {
@@ -162,26 +162,27 @@ const deleteBlog = async function (req, res) {
 
 const DeleteByQuery = async function (req, res) {
     try {
+       
         let data = req.query
 
 
         let { authorID, tags, category, subcategory, isPublished } = data
 
         // As in the above data only author id is object id so validating it-----------------------------
-        if(!isValidObjectId(authorID)) return res.send({msg:"Authorid is in valid"})
+        if(!isValidObjectId(authorID)) return res.status(400).send({msg:"Authorid is in valid"})
 
         if (!(authorID || tags || category || subcategory || isPublished)) {
             return res.status(400).send({ status: false, msg: "Please pass any query" })
         }
         
         // $or means if any of the condition matches --------------------------------------------------
-        let blog = await blogmodel.findOne({ $or: [{ authorID: authorID }, { tags: tags }, { category: category }, { subcategory: subcategory }, { isPublished: isPublished }] })
+        let blog = await blogModel.findOne({ $or: [{ authorID: authorID }, { tags: tags }, { category: category }, { subcategory: subcategory }, { isPublished: isPublished }] })
 
         if (!blog) return res.status(404).send({ status: false, msg: "False" })
         
 
         //Before updating firstly we are checking it if data is deleted or not so only passing not deleted data--------------
-        let blogDetails = await blogmodel.updateMany({ $and: [{ isDeleted: false }, { $or: [{ authorID: authorID }, { tags: tags }, { category: category }, { subcategory: subcategory }, { isPublished: isPublished }] }] },
+        let blogDetails = await blogModel.updateMany({ $and: [{ isDeleted: false }, { $or: [{ authorID: authorID }, { tags: tags }, { category: category }, { subcategory: subcategory }, { isPublished: isPublished }] }] },
             { $set: { isDeleted: true } })
 
         if (blogDetails.modifiedCount == 0 || blogDetails.matchedCount == 0) {
@@ -190,7 +191,7 @@ const DeleteByQuery = async function (req, res) {
         
 
         // We don't have to send the updated data as it is a delete api so only sending message --------------------------
-        res.status(200).send({ status: true, msg: "Blog deleted" })
+        res.status(200).send({ status: true, msg: "Blog deleted Successfully!!" })
 
     } 
     catch (error) {

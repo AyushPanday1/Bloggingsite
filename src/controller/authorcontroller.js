@@ -15,6 +15,7 @@ const createAuthor = async function (req, res) {
     }
 }
 
+
 const login = async function (req, res) {
     let userName = req.body.email;
     let password = req.body.password;
@@ -35,12 +36,16 @@ const login = async function (req, res) {
             },
             "functionup-secret-key"
         );
+
         res.setHeader("x-api-key", token);
         res.status(200).send({ status: true, msg: "Successful-login-Response-structure", data: token });
+
     } catch (Err) {
         return res.status(400).send({ status: false, msg: "username or password is not correct" });
     }
 };
 
+
+// Exporting modules for using in router.
 module.exports.createAuthor = createAuthor 
-module.exports.login = login                // Exporting module for using in router.
+module.exports.login = login                
