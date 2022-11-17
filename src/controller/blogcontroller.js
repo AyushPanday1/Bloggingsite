@@ -85,6 +85,11 @@ const getBlog = async function (req, res) {
 
 const updateAllBlogs = async function (req, res) {
     try {
+        let {authorID,category,isDeleted} = req.body   
+        if((authorID||category||isDeleted)){   //edge case if any of these entered in the body then it will through an error 
+            res.status(400).send({status : false, msg : "don't want these attributes"})
+        }
+
         const blogId1 = req.params.blogId
         if (!isValidObjectId(blogId1)) {
             return res.send("BlogId is not valid")
@@ -169,17 +174,18 @@ const DeleteByQuery = async function (req, res) {
         let data = req.query
 
 
-        let { authorID, tags, category, subcategory, isPublished } = data
+        let { authorID, tags, category, subcategory, isPublished, decodedToken } = data
 
-        // As in the above data only author id is object id so validating it-----------------------------
-        if (!isValidObjectId(authorID)) return res.status(400).send({ msg: "Authorid is in valid" })
+        
 
-        if (!(authorID || tags || category || subcategory || isPublished)) {
+        if (!(authorID || tags || category || subcategory || isPublished || decodedToken)) {
             return res.status(400).send({ status: false, msg: "Please pass any query" })
         }
+        // As in the above data only author id is object id so validating it-----------------------------
+        if (!isValidObjectId(authorID)||!isValidObjectId(decodedToken)) return res.status(400).send({ msg: "Authorid or decodedToken is invalid" })
 
         // $or means if any of the condition matches --------------------------------------------------
-        let blog = await blogModel.findOne({ $or: [{ authorID: authorID }, { tags: tags }, { category: category }, { subcategory: subcategory }, { isPublished: isPublished }] })
+        let blog = await blogModel.findOne({ $or: [{ authorID: authorID }, { tags: tags }, { category: category }, { subcategory: subcategory }, { isPublished: isPublished },{authorID:decodedToken}] })
 
         if (!blog) return res.status(404).send({ status: false, msg: "False" })
 

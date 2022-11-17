@@ -6,18 +6,19 @@ const blogModel = require('../model/blogmodel')
 const authentication = function (req, res, next) {
     try {
         let token = req.headers["x-api-key"]
-        console.log(token)
+        // console.log(token)
         if (!token) return res.status(400).send({ status: false, msg: "token must be present" });
 
         let decodedToken = jwt.verify(token, "functionup-secret-key")
         
-        if(!decodedToken) return res.status(400).send({msg:"Token is no valid."})
+        if(!decodedToken) {return res.status(400).send({msg:"Token is not valid."})}
         
         req.decodedToken = decodedToken.authorID
+        req.query.decodedToken=decodedToken.authorID
         next()
     }
     catch (error) {
-        return res.status(500).send({ status: false, key: error.message });
+        return res.status(400).send({ status: false, key: error.message });
     }
 }
 
@@ -55,62 +56,62 @@ const authorizationbypath = async (req, res, next) => {
 
 // Authorisation with the data of query section ------------------------------------------
 
-const authorisebyquery = async function (req, res, next) {
+// const authorisebyquery = async function (req, res, next) {
    
-    try {
+//     try {
 
                                                                           
-        let Loggedinuser =  req["x-api-key"].authorID                           // Taking the user id of decodedtoken from server------------     
+//         let Loggedinuser =  req["x-api-key"].authorID                           // Taking the user id of decodedtoken from server------------     
          
-        let {category, authorID, tags, subcategory, isPublished} = req.query;  // Taking attributes in query section -----------------------
+//         let {category, authorID, tags, subcategory, isPublished} = req.query;  // Taking attributes in query section -----------------------
        
-        const object =                                                           // Making an object with not deleted data -------------------
-        {
-            isDeleted: false
-        };
+//         const object =                                                           // Making an object with not deleted data -------------------
+//         {
+//             isDeleted: false
+//         };
 
-        if(category)                                                           // IF user is giving category then add it to object and so on-
-        object.category = category;
+//         if(category)                                                           // IF user is giving category then add it to object and so on-
+//         object.category = category;
 
-        if(authorID) 
-        object.authorID = authorID;
+//         if(authorID) 
+//         object.authorID = authorID;
 
-        if(tags)
-        object.tags = tags;
+//         if(tags)
+//         object.tags = tags;
 
-        if(subcategory)
-        object.subcategory = subcategory;
+//         if(subcategory)
+//         object.subcategory = subcategory;
 
-        if(isPublished == false) 
-        object.isPublished = isPublished;
+//         if(isPublished == false) 
+//         object.isPublished = isPublished;
 
-        // Here i am checking from databse with object queries and applying extra filter to be same author id of loggedinuser
+//         // Here i am checking from databse with object queries and applying extra filter to be same author id of loggedinuser
 
-        let matchedData = await blogModel.find(object).filter(x => x.authorID == Loggedinuser); 
+//         let matchedData = await blogModel.find(object).filter(x => x.authorID == Loggedinuser); 
 
-        if(!matchedData)
-        return res.status(404).send({status: false, msg: "No such data found."});
+//         if(!matchedData)
+//         return res.status(404).send({status: false, msg: "No such data found."});
 
-        // Checking if both ids are same or not----------------------------------------------------------------
-        if ((matchedData != Loggedinuser)) {
-            return res.status(400).send({ msg: "User Has No Access" })
-        }
+//         // Checking if both ids are same or not----------------------------------------------------------------
+//         if ((matchedData != Loggedinuser)) {
+//             return res.status(400).send({ msg: "User Has No Access" })
+//         }
 
-        req.object = object;
+//         req.object = object;
 
-        next()
-    }
-    catch (error) {
-        return res.status(500).send({status:false,msg: error.message})
-    }
-}
+//         next()
+//     }
+//     catch (error) {
+//         return res.status(500).send({status:false,msg: error.message})
+//     }
+// }
 
 
 // Exporting files --------------------------------------------------------
 
 module.exports.authentication = authentication ;
 module.exports.authorizationbypath = authorizationbypath ;
-module.exports.authorisebyquery = authorisebyquery;
+// module.exports.authorisebyquery = authorisebyquery;
 
 
     
