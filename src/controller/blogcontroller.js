@@ -104,7 +104,7 @@ const updateAllBlogs = async function (req, res) {
 
         const tagsData = findBlog.tags
         const subcategryData = findBlog.subcategory
-         
+
         // Adding New tags and subcategories in previous existing data(arrays)-----------------------
         tagsData.push(tags)
         subcategryData.push(subcategory)
@@ -147,10 +147,11 @@ const deleteBlog = async function (req, res) {
         if (!blog) {
             return res.status(400).send({ status: false, msg: "Blog not found" })
         }
-        
+
+
         // beFore updating we pass the conditions that data should not be deleted and returning the updated data using new:true.
-        let saveData = await blogModel.findOneAndUpdate({ isDeleted: false, _id: blogId }, { isDeleted: true }, { new: true })  
-        
+        let saveData = await blogModel.findOneAndUpdate({ isDeleted: false, _id: blogId }, { isDeleted: true }, { new: true })
+
         res.status(200).send({ msg: saveData })
     }
     catch (err) {
@@ -164,24 +165,24 @@ const deleteBlog = async function (req, res) {
 
 const DeleteByQuery = async function (req, res) {
     try {
-       
+
         let data = req.query
 
 
         let { authorID, tags, category, subcategory, isPublished } = data
 
         // As in the above data only author id is object id so validating it-----------------------------
-        if(!isValidObjectId(authorID)) return res.status(400).send({msg:"Authorid is in valid"})
+        if (!isValidObjectId(authorID)) return res.status(400).send({ msg: "Authorid is in valid" })
 
         if (!(authorID || tags || category || subcategory || isPublished)) {
             return res.status(400).send({ status: false, msg: "Please pass any query" })
         }
-        
+
         // $or means if any of the condition matches --------------------------------------------------
         let blog = await blogModel.findOne({ $or: [{ authorID: authorID }, { tags: tags }, { category: category }, { subcategory: subcategory }, { isPublished: isPublished }] })
 
         if (!blog) return res.status(404).send({ status: false, msg: "False" })
-        
+
 
         //Before updating firstly we are checking it if data is deleted or not so only passing not deleted data--------------
         let blogDetails = await blogModel.updateMany({ $and: [{ isDeleted: false }, { $or: [{ authorID: authorID }, { tags: tags }, { category: category }, { subcategory: subcategory }, { isPublished: isPublished }] }] },
@@ -190,12 +191,12 @@ const DeleteByQuery = async function (req, res) {
         if (blogDetails.modifiedCount == 0 || blogDetails.matchedCount == 0) {
             return res.status(404).send({ status: false, msg: "No blog found" })
         }
-        
+
 
         // We don't have to send the updated data as it is a delete api so only sending message --------------------------
         res.status(200).send({ status: true, msg: "Blog deleted Successfully!!" })
 
-    } 
+    }
     catch (error) {
         res.status(500).send({ msg: error.message })
     }
@@ -204,7 +205,7 @@ const DeleteByQuery = async function (req, res) {
 
 // Exporting all the functions from here -------------------------------------------------------------
 
-module.exports.createBlog=createBlog;
+module.exports.createBlog = createBlog;
 module.exports.getBlog = getBlog
 module.exports.updateAllBlogs = updateAllBlogs
 module.exports.deleteBlog = deleteBlog
