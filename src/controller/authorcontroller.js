@@ -16,10 +16,10 @@ const createAuthor = async function (req, res) {
 }
 
 const login = async function (req, res) {
-    let userName = req.body.email;
+    let email = req.body.email;
     let password = req.body.password;
     try {
-        let author = await Authormodel.findOne({ email: userName, password: password });
+        let author = await Authormodel.findOne({ email: email, password: password });
         if (!author)
             return res.status(400).send({
                 status: false,
@@ -29,7 +29,8 @@ const login = async function (req, res) {
 
         let token = jwt.sign(
             {
-                userId: author._id.toString(),
+                authorID: author._id.toString(),
+                email,
                 batch: "Lithium",
                 project: "project1",
             },
