@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-// Validating and authenticating the id ------------------------------------------------------------------
+// Validating and authenticating the id -----------------------------------------------------------------
 
 const authentication = function (req, res, next) {
     try {
@@ -9,8 +9,10 @@ const authentication = function (req, res, next) {
         if (!token) return res.status(400).send({ status: false, msg: "token must be present" });
 
         let decodedToken = jwt.verify(token, "functionup-secret-key")
-        console.log(decodedToken)
-
+        
+        if(!decodedToken) return res.status(400).send({msg:"Token is no valid."})
+        
+        req.decodedToken = decodedToken.authorID
         next()
     }
     catch (error) {
