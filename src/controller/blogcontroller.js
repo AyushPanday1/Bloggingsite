@@ -148,10 +148,8 @@ const deleteBlog = async function (req, res) {
         }
         
         // beFore updating we pass the conditions that data should not be deleted and returning the updated data using new:true.
-
-        let saveData = await blogModel.updateOne({ isDeleted: false, _id: blogId }, {$set :{isDeleted: true }}, { new: true })  
-
-
+        let saveData = await blogModel.updateOne({ isDeleted: false, _id: blogId }, { isDeleted: true }, { new: true })  
+        
         res.status(200).send({ msg: saveData })
     }
     catch (err) {
