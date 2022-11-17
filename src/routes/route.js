@@ -28,11 +28,11 @@ router.get('/getblogs',     midAuth.authentication,    blogController.getBlog)
 
 
 //Fourth router for updating blogs --------------
-router.put('/update/:blogId',   midAuth.authentication,    midAuth.Authorisation,   blogController.updateAllBlogs)
+router.put('/update/:blogId',   midAuth.authentication,    midAuth.authorizationbypath,   blogController.updateAllBlogs)
 
 
 // Fifth router for deleting blogs using path params -------
-router.delete('/delete/:blogId',  midAuth.authentication,     midAuth.Authorisation,     blogController.deleteBlog)
+router.delete('/delete/:blogId',  midAuth.authentication,     midAuth.authorizationbypath,     blogController.deleteBlog)
 
 
 // Sixth router for deleting blogs using query params------

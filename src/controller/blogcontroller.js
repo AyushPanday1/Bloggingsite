@@ -1,7 +1,7 @@
 const Authormodel = require('../model/Authormodel')             // Importing Authormodel from authormodel.js module
 const blogModel = require('../model/blogmodel')                 // Importing blogmodel   from  blogmodel.js  module
 
-const mongoose = require('mongoose')
+// const mongoose = require('mongoose')
 const { isValidObjectId } = require("mongoose");                // Inbuilt function of mongoose to check any id is valid object id or not
 
 
@@ -51,7 +51,7 @@ const getBlog = async function (req, res) {
 
         }
         if (authorID) {
-            data.authorID = authorID
+            data.authorID = authorID    //making a key named authorID and store the authorID
         }
         if (category) {
             data.category = category
@@ -65,6 +65,7 @@ const getBlog = async function (req, res) {
         }
 
         const result = await blogModel.find(data)
+
 
         if (result) {
             res.status(201).send({ msg: result })
@@ -122,8 +123,8 @@ const updateAllBlogs = async function (req, res) {
         return res.status(200).send({ msg: blogData })
     }
     catch (error) {
-        res.status(400).send({ msg: error })
-        console.log({ msg: error })
+        res.status(500).send({ msg: error.message })
+        console.log({ msg: error.message })
     }
 };
 
@@ -148,7 +149,7 @@ const deleteBlog = async function (req, res) {
         }
         
         // beFore updating we pass the conditions that data should not be deleted and returning the updated data using new:true.
-        let saveData = await blogModel.updateOne({ isDeleted: false, _id: blogId }, { isDeleted: true }, { new: true })  
+        let saveData = await blogModel.findOneAndUpdate({ isDeleted: false, _id: blogId }, { isDeleted: true }, { new: true })  
         
         res.status(200).send({ msg: saveData })
     }

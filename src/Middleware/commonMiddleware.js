@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-
+const {isValidObjectId} = require('mongoose')
+const blogModel = require('../model/blogmodel')
 // Validating and authenticating the id -----------------------------------------------------------------
 
 const authentication = function (req, res, next) {
@@ -16,7 +17,7 @@ const authentication = function (req, res, next) {
         next()
     }
     catch (error) {
-        return res.status(400).send({ status: false, key: error.message });
+        return res.status(500).send({ status: false, key: error.message });
     }
 }
 
@@ -25,22 +26,25 @@ const authentication = function (req, res, next) {
 // Authorisation for checking user if is authorised to do the task or not-----------------------------------
 const authorizationbypath = async (req, res, next) => {
     try {
-        const blogId = req.params.blogId;
-
-        if (!isValidObjectId(blogId))
-            return res.status(400).send({ status: false, msg: "BlogId is not valid" })
-        
         const token = req.headers["x-api-key"];
-
         const decodedToken = jwt.verify(token,"functionup-secret-key");
 
         if (!decodedToken)
             return res.status(400).send({ status: false, msg: "Provide your own token" });
+        const blogId = req.params.blogId;
+
+        if (!isValidObjectId(blogId))
+            return res.status(400).send({ status: false, msg: "BlogId is not valid" })
+         
         
         const blog = await blogModel.findById(blogId)
+        if(!blog){
+            res.status(400).send({status: false, msg: "blogId is invalid"})
+        }
 
-        if (blog.authorId.toString()  != decodedToken.authorId)
+        if (blog.authorID  != decodedToken.authorID){
             return res.status(400).send({ status: false, msg: "Unauthorized person" });
+        }
 
         next()
     }
@@ -89,7 +93,7 @@ const authorisebyquery = async function (req, res, next) {
 
         // Checking if both ids are same or not----------------------------------------------------------------
         if ((matchedData != Loggedinuser)) {
-            return res.status(403).send({ msg: "User Has No Access" })
+            return res.status(400).send({ msg: "User Has No Access" })
         }
 
         req.object = object;
