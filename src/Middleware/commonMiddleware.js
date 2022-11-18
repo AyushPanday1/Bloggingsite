@@ -60,7 +60,7 @@ const authorizationbypath = async (req, res, next) => {
 
 module.exports.authentication = authentication ;
 module.exports.authorizationbypath = authorizationbypath ;
-// module.exports.authorisebyquery = authorisebyquery;
+
 
 
     
