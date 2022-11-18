@@ -92,7 +92,7 @@ const updateAllBlogs = async function (req, res) {
 
         const blogId1 = req.params.blogId
         if (!isValidObjectId(blogId1)) {
-            return res.send("BlogId is not valid")
+            return res.send({status : false, msg:"BlogId is not valid"})
         }
 
         // Available is checking that the wanted data is available in our database or not--------------
