@@ -15,7 +15,7 @@ const authentication = function (req, res, next) {
         if(!decodedToken) {return res.status(400).send({msg:"Token is not valid."})}
         
         req.decodedToken = decodedToken.authorId
-        req.query.decodedToken=decodedToken.authorId
+       
         next()
     }
     catch (error) {

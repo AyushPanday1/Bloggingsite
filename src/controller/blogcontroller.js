@@ -106,7 +106,7 @@ const updateAllBlogs = async function (req, res) {
 
         const { title, body, tags, subcategory } = req.body
 
-        const findBlog = await blogModel.findById(blogId1)
+        const findBlog = await blogModel.find({_id:blogId1,isDeleted:false})
 
         const tagsData = findBlog.tags
         const subcategryData = findBlog.subcategory
@@ -126,7 +126,7 @@ const updateAllBlogs = async function (req, res) {
 
             }
         }, { new: true })
-        return res.status(201).send({ status:true,msg: blogData })
+        return res.status(200).send({ status:true,msg: blogData })
     }
     catch (error) {
         res.status(500).send({ status: false,msg: error.message })
@@ -185,7 +185,7 @@ const DeleteByQuery = async function (req, res) {
         if (!isValidObjectId(authorId)) return res.status(400).send({ msg: "Authorid is invalid" })
 
         // $or means if any of the condition matches --------------------------------------------------
-        let blog = await blogModel.findOne({ $or: [{ authorId: authorId }, { tags: tags }, { category: category }, { subcategory: subcategory }, { isPublished: isPublished },{authorId:decodedToken}] })
+        let blog = await blogModel.find({ $or: [{ authorId: authorId }, { tags: tags }, { category: category }, { subcategory: subcategory }, { isPublished: isPublished },{authorId:decodedToken}] })
 
         if (!blog) return res.status(404).send({ status: false, msg: "False" })
 
