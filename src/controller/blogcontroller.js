@@ -1,7 +1,7 @@
 const Authormodel = require('../model/Authormodel')             // Importing Authormodel from authormodel.js module
 const blogModel = require('../model/blogmodel')                 // Importing blogmodel   from  blogmodel.js  module
 
-// const mongoose = require('mongoose')
+const mongoose = require('mongoose')
 const { isValidObjectId } = require("mongoose");                // Inbuilt function of mongoose to check any id is valid object id or not
 
 
@@ -29,7 +29,7 @@ const createBlog = async function (req, res) {
         res.status(201).send({ status: true, msg: savedBlog })
     }
     catch (error) {
-        res.status(400).send({ msg: error })
+        res.status(500).send({ msg: error })
         console.log({ msg: error })
     }
 };
@@ -86,8 +86,8 @@ const getBlog = async function (req, res) {
 const updateAllBlogs = async function (req, res) {
     try {
         let {authorID,category,isDeleted} = req.body   
-        if((authorID||category||isDeleted)){   //edge case if any of these entered in the body then it will through an error 
-            res.status(400).send({status : false, msg : "don't want these attributes"})
+        if((authorID||category||isDeleted)){                     //edge case if any of these entered in the body then it will through an error 
+            res.status(400).send({status : false, msg : "Don't want these attributes"})
         }
 
         const blogId1 = req.params.blogId
@@ -97,6 +97,7 @@ const updateAllBlogs = async function (req, res) {
 
         // Available is checking that the wanted data is available in our database or not--------------
         let available = await blogModel.findById(blogId1)
+
         if (!available) {
             return res.status(400).send({ status: false, msg: "BlogId not found" })
         }
@@ -155,9 +156,9 @@ const deleteBlog = async function (req, res) {
 
 
         // beFore updating we pass the conditions that data should not be deleted and returning the updated data using new:true.
-        let saveData = await blogModel.findOneAndUpdate({ isDeleted: false, _id: blogId }, { isDeleted: true }, { new: true })
+        let deletddata = await blogModel.findOneAndUpdate({ isDeleted: false, _id: blogId }, { isDeleted: true }, { new: true })
 
-        res.status(200).send({ msg: saveData })
+        res.status(200).send({ status : true , Refrence:deletddata , Message: "Deleted successfully!!"})
     }
     catch (err) {
         res.status(500).send({ msg: err.message })
@@ -174,15 +175,14 @@ const DeleteByQuery = async function (req, res) {
         let data = req.query
 
 
-        let { authorID, tags, category, subcategory, isPublished, decodedToken } = data
+        let { authorID, tags, category, subcategory, isPublished , decodedToken } = data
 
-        
 
-        if (!(authorID || tags || category || subcategory || isPublished || decodedToken)) {
+        if (!(authorID || tags || category || subcategory || isPublished || decodedToken )) {
             return res.status(400).send({ status: false, msg: "Please pass any query" })
         }
         // As in the above data only author id is object id so validating it-----------------------------
-        if (!isValidObjectId(authorID)||!isValidObjectId(decodedToken)) return res.status(400).send({ msg: "Authorid or decodedToken is invalid" })
+        if (!isValidObjectId(authorID)) return res.status(400).send({ msg: "Authorid is invalid" })
 
         // $or means if any of the condition matches --------------------------------------------------
         let blog = await blogModel.findOne({ $or: [{ authorID: authorID }, { tags: tags }, { category: category }, { subcategory: subcategory }, { isPublished: isPublished },{authorID:decodedToken}] })

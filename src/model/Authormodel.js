@@ -32,7 +32,7 @@ const Authormodel = new mongoose.Schema({
        lowercase: true,
        unique: true,
         required: true,
-        validate: [validateEmail, 'Please fill a valid email address'],    // Using the above function in schema-----------
+        validate: [validateEmail, 'Please fill a valid email address'],           // Using the above function in schema-----------
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
      },
 
@@ -40,7 +40,8 @@ const Authormodel = new mongoose.Schema({
        required:true,
        type:String
      }},
-      {timestamps:true})
+
+    {timestamps:true})
 
 // Exporting the model and declaring database for allowing crud operations in different modules------
 
