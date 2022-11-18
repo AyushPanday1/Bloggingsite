@@ -75,7 +75,7 @@ const getBlog = async function (req, res) {
         }
     }
     catch (error) {
-        res.status(500).send({ msg: error.message })
+        res.status(500).send({status: false, msg: error.message })
     }
 }
 
@@ -129,7 +129,7 @@ const updateAllBlogs = async function (req, res) {
         return res.status(200).send({ status:true,msg: blogData })
     }
     catch (error) {
-        res.status(500).send({ msg: error.message })
+        res.status(500).send({ status: false,msg: error.message })
         console.log({ msg: error.message })
     }
 };
@@ -161,7 +161,7 @@ const deleteBlog = async function (req, res) {
         res.status(200).send({ status : true , Refrence:deletddata , Message: "Deleted successfully!!"})
     }
     catch (err) {
-        res.status(500).send({ msg: err.message })
+        res.status(500).send({status: false, msg: err.message })
     }
 }
 
