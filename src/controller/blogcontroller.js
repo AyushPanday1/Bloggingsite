@@ -58,7 +58,7 @@ const getBlog = async function (req, res) {
         }
 
         if (tags) {
-            data.tags = tags
+            data.tags = tags         //data.tags(keys)=tags(destructure)
         }
         if (subcategory) {
             data.subcategory = subcategory
@@ -67,7 +67,7 @@ const getBlog = async function (req, res) {
         const result = await blogModel.find(data)
 
 
-        if (result) {
+        if (result.length>0) {        //if the element is greater than 0 than it will return "no data found"
             res.status(201).send({ status:true,msg: result })
         }
         else {
@@ -156,7 +156,7 @@ const deleteBlog = async function (req, res) {
 
 
         // beFore updating we pass the conditions that data should not be deleted and returning the updated data using new:true.
-        let deletddata = await blogModel.findOneAndUpdate({ isDeleted: false, _id: blogId }, { isDeleted: true }, { new: true })
+        let deletddata = await blogModel.findOneAndUpdate({ isDeleted: false, _id: blogId }, { isDeleted: true, deletedAt : new Date(Date.now()) }, { new: true })
 
         res.status(201).send({ status : true , Refrence:deletddata , Message: "Deleted successfully!!"})
     }
@@ -185,14 +185,14 @@ const DeleteByQuery = async function (req, res) {
         if (!isValidObjectId(authorId)) return res.status(400).send({ msg: "Authorid is invalid" })
 
         // $or means if any of the condition matches --------------------------------------------------
-        let blog = await blogModel.find({ $or: [{ authorId: authorId }, { tags: tags }, { category: category }, { subcategory: subcategory }, { isPublished: isPublished },{authorId:decodedToken}] })
+        let blog = await blogModel.find(req.query)
 
-        if (!blog) return res.status(404).send({ status: false, msg: "False" })
+        if (blog.length==0) return res.status(404).send({ status: false, msg: "False" })
 
 
         //Before updating firstly we are checking it if data is deleted or not so only passing not deleted data--------------
-        let blogDetails = await blogModel.updateMany({ $and: [{ isDeleted: false }, { $or: [{ authorId: authorId }, { tags: tags }, { category: category }, { subcategory: subcategory }, { isPublished: isPublished }] }] },
-            { $set: { isDeleted: true } })
+        let blogDetails = await blogModel.updateMany({ $and: [{ isDeleted: false, authorId : req.decodedToken },data ] },{ $set: { isDeleted: true , deletedAt : new data(), isPublished : false }},{new : true})
+            
 
         if (blogDetails.modifiedCount == 0 || blogDetails.matchedCount == 0) {
             return res.status(404).send({ status: false, msg: "No blog found" })
