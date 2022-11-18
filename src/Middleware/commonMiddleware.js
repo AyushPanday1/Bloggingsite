@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const {isValidObjectId} = require('mongoose')
 const blogModel = require('../model/blogmodel')
+
 // Validating and authenticating the id -----------------------------------------------------------------
 
 const authentication = function (req, res, next) {
@@ -18,7 +19,7 @@ const authentication = function (req, res, next) {
         next()
     }
     catch (error) {
-        return res.status(400).send({ status: false, key: error.message });
+        return res.status(500).send({ status: false, key: error.message });
     }
 }
 
@@ -32,7 +33,8 @@ const authorizationbypath = async (req, res, next) => {
 
         if (!decodedToken)
             return res.status(400).send({ status: false, msg: "Provide your own token" });
-        const blogId = req.params.blogId;
+      
+            const blogId = req.params.blogId;
 
         if (!isValidObjectId(blogId))
             return res.status(400).send({ status: false, msg: "BlogId is not valid" })

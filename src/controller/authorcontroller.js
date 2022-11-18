@@ -8,7 +8,7 @@ const createAuthor = async function (req, res) {
     try {
         const authorInfo = req.body
         const data = await Authormodel.create(authorInfo)
-        res.status(201).send({ msg: data })
+        res.status(201).send({ status:true ,msg: data })
     }
 
     catch (err) {

@@ -29,7 +29,7 @@ const createBlog = async function (req, res) {
         res.status(201).send({ status: true, msg: savedBlog })
     }
     catch (error) {
-        res.status(500).send({ msg: error })
+        res.status(500).send({ status:false,msg: error })
         console.log({ msg: error })
     }
 };
@@ -68,10 +68,10 @@ const getBlog = async function (req, res) {
 
 
         if (result) {
-            res.status(201).send({ msg: result })
+            res.status(201).send({ status:true,msg: result })
         }
         else {
-            res.status(404).send({ msg: "No data found" })
+            res.status(404).send({status:false, msg: "No data found" })
         }
     }
     catch (error) {
@@ -126,7 +126,7 @@ const updateAllBlogs = async function (req, res) {
 
             }
         }, { new: true })
-        return res.status(200).send({ msg: blogData })
+        return res.status(200).send({ status:true,msg: blogData })
     }
     catch (error) {
         res.status(500).send({ msg: error.message })
@@ -204,7 +204,7 @@ const DeleteByQuery = async function (req, res) {
 
     }
     catch (error) {
-        res.status(500).send({ msg: error.message })
+        res.status(500).send({status:false, msg: error.message })
     }
 }
 
