@@ -51,7 +51,7 @@ const getBlog = async function (req, res) {
 
         }
         if (authorId) {
-            data.authorID = authorId    //making a key named authorID and store the authorID
+            data.authorId = authorId    //making a key named authorID and store the authorID
         }
         if (category) {
             data.category = category
