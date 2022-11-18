@@ -126,7 +126,7 @@ const updateAllBlogs = async function (req, res) {
 
             }
         }, { new: true })
-        return res.status(200).send({ status:true,msg: blogData })
+        return res.status(201).send({ status:true,msg: blogData })
     }
     catch (error) {
         res.status(500).send({ status: false,msg: error.message })
@@ -158,7 +158,7 @@ const deleteBlog = async function (req, res) {
         // beFore updating we pass the conditions that data should not be deleted and returning the updated data using new:true.
         let deletddata = await blogModel.findOneAndUpdate({ isDeleted: false, _id: blogId }, { isDeleted: true }, { new: true })
 
-        res.status(200).send({ status : true , Refrence:deletddata , Message: "Deleted successfully!!"})
+        res.status(201).send({ status : true , Refrence:deletddata , Message: "Deleted successfully!!"})
     }
     catch (err) {
         res.status(500).send({status: false, msg: err.message })
@@ -200,7 +200,7 @@ const DeleteByQuery = async function (req, res) {
 
 
         // We don't have to send the updated data as it is a delete api so only sending message --------------------------
-        res.status(200).send({ status: true, msg: "Blog deleted Successfully!!" })
+        res.status(201).send({ status: true, msg: "Blog deleted Successfully!!" })
 
     }
     catch (error) {
