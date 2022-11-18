@@ -14,8 +14,8 @@ const authentication = function (req, res, next) {
         
         if(!decodedToken) {return res.status(400).send({msg:"Token is not valid."})}
         
-        req.decodedToken = decodedToken.authorID
-        req.query.decodedToken=decodedToken.authorID
+        req.decodedToken = decodedToken.authorId
+        req.query.decodedToken=decodedToken.authorId
         next()
     }
     catch (error) {
@@ -45,7 +45,7 @@ const authorizationbypath = async (req, res, next) => {
             res.status(400).send({status: false, msg: "blogId is invalid"})
         }
 
-        if (blog.authorID  != decodedToken.authorID){
+        if (blog.authorId  != decodedToken.authorId){
             return res.status(400).send({ status: false, msg: "Unauthorized person" });
         }
 

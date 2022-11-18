@@ -10,18 +10,18 @@ const { isValidObjectId } = require("mongoose");                // Inbuilt funct
 const createBlog = async function (req, res) {
 
     try {
-        let authorID = req.body.authorID
+        let authorId = req.body.authorId
         let blog = req.body
-        if (!authorID) {
+        if (!authorId) {
             return res.status(400).send({ status: false, msg: "AuthorId must be present" })
         }
 
         // Checking author id is valid or not ---------------------------------------------------------------
-        if (!isValidObjectId(authorID)) {
+        if (!isValidObjectId(authorId)) {
             return res.send("authorid is not valid")
         }
 
-        let available = await Authormodel.findById(authorID)
+        let available = await Authormodel.findById(authorId)
         if (!available) {
             return res.status(400).send({ status: false, msg: "Authorid not found" })
         }
@@ -42,7 +42,7 @@ const getBlog = async function (req, res) {
     try {
 
         // Taking all queries in one object to reduce time  --------------------------------------------
-        const { authorID, category, tags, subcategory } = req.query
+        const { authorId, category, tags, subcategory } = req.query
 
         let data = {
 
@@ -50,8 +50,8 @@ const getBlog = async function (req, res) {
             isPublished: true,
 
         }
-        if (authorID) {
-            data.authorID = authorID    //making a key named authorID and store the authorID
+        if (authorId) {
+            data.authorID = authorId    //making a key named authorID and store the authorID
         }
         if (category) {
             data.category = category
@@ -85,8 +85,8 @@ const getBlog = async function (req, res) {
 
 const updateAllBlogs = async function (req, res) {
     try {
-        let {authorID,category,isDeleted} = req.body   
-        if((authorID||category||isDeleted)){                     //edge case if any of these entered in the body then it will through an error 
+        let {authorId,category,isDeleted} = req.body   
+        if((authorId||category||isDeleted)){                     //edge case if any of these entered in the body then it will through an error 
             res.status(400).send({status : false, msg : "Don't want these attributes"})
         }
 
@@ -175,23 +175,23 @@ const DeleteByQuery = async function (req, res) {
         let data = req.query
 
 
-        let { authorID, tags, category, subcategory, isPublished , decodedToken } = data
+        let { authorId, tags, category, subcategory, isPublished , decodedToken } = data
 
 
-        if (!(authorID || tags || category || subcategory || isPublished || decodedToken )) {
+        if (!(authorId || tags || category || subcategory || isPublished || decodedToken )) {
             return res.status(400).send({ status: false, msg: "Please pass any query" })
         }
         // As in the above data only author id is object id so validating it-----------------------------
-        if (!isValidObjectId(authorID)) return res.status(400).send({ msg: "Authorid is invalid" })
+        if (!isValidObjectId(authorId)) return res.status(400).send({ msg: "Authorid is invalid" })
 
         // $or means if any of the condition matches --------------------------------------------------
-        let blog = await blogModel.findOne({ $or: [{ authorID: authorID }, { tags: tags }, { category: category }, { subcategory: subcategory }, { isPublished: isPublished },{authorID:decodedToken}] })
+        let blog = await blogModel.findOne({ $or: [{ authorId: authorId }, { tags: tags }, { category: category }, { subcategory: subcategory }, { isPublished: isPublished },{authorId:decodedToken}] })
 
         if (!blog) return res.status(404).send({ status: false, msg: "False" })
 
 
         //Before updating firstly we are checking it if data is deleted or not so only passing not deleted data--------------
-        let blogDetails = await blogModel.updateMany({ $and: [{ isDeleted: false }, { $or: [{ authorID: authorID }, { tags: tags }, { category: category }, { subcategory: subcategory }, { isPublished: isPublished }] }] },
+        let blogDetails = await blogModel.updateMany({ $and: [{ isDeleted: false }, { $or: [{ authorId: authorId }, { tags: tags }, { category: category }, { subcategory: subcategory }, { isPublished: isPublished }] }] },
             { $set: { isDeleted: true } })
 
         if (blogDetails.modifiedCount == 0 || blogDetails.matchedCount == 0) {

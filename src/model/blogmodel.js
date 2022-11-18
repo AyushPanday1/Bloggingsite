@@ -12,7 +12,7 @@ const blogmodel = new mongoose.Schema({
         required:true,
         type:String
     },
-    authorID : {
+    authorId : {
         required: true,
         type: ObjectId, 
         ref:"Author123"                                // Refrence to author model database-----------
@@ -32,7 +32,7 @@ const blogmodel = new mongoose.Schema({
         default:false
     },
     published_at: Date,
-    
+
     isPublished:{
         type:Boolean,
         default:false
