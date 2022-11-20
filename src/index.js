@@ -24,5 +24,5 @@ mongoose.connect("mongodb+srv://AyushPanday:AyushPan123@cluster0.eixapeq.mongodb
 
 
 app.listen(3000 , function(){
-    console.log("Running on the port " ,3000)
+    console.log("Running on the port",3000)
 })

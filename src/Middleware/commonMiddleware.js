@@ -10,13 +10,14 @@ const authentication = function (req, res, next) {
         // console.log(token)
         if (!token) return res.status(400).send({ status: false, msg: "token must be present" });
 
-        let decodedToken = jwt.verify(token, "functionup-secret-key")
-        
-        if(!decodedToken) {return res.status(400).send({msg:"Token is not valid."})}
-        
-        req.decodedToken = decodedToken.authorId
-       
-        next()
+        let decodedToken = jwt.verify(token, "functionup-secret-key",function(err,decoded){
+            if(err){
+                return res.status(400).send({status : false, msg : "token invalid"})
+            }else{
+                req.authorId = decoded.authorId
+                return next()
+            }
+        })
     }
     catch (error) {
         return res.status(500).send({ status: false, key: error.message });
