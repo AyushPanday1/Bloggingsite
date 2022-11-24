@@ -5,18 +5,7 @@ let emailRegex = /^[a-z]{1}[a-z0-9._]{1,100}[@]{1}[a-z]{2,15}[.]{1}[a-z]{2,10}$/
 let passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
 
 //1st-- Author API-------------------------------------------------------------------------------------------
-// const createAuthor = async function (req, res) {
 
-//     try {
-//         const authorInfo = req.body
-//         const data = await Authormodel.create(authorInfo)
-//         res.status(201).send({ status:true ,msg: data })
-//     }
-
-//     catch (err) {
-//         res.status(500).send({ msg: err.message })
-//     }
-// }
      const createAuthor = async function(req,res){
         try{
         let data = req.body
