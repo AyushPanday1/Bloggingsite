@@ -14,8 +14,6 @@
 ## Introduction
 Welcome to the BloggingSite Backend project! This repository serves as the backend component of a versatile platform for bloggers to create and manage content. With user-friendly APIs and robust data models, this project offers a solid foundation for building a feature-rich blogging site.
 
-![Blogging](https://example.com/blogging-image.jpg)
-
 ## Technologies Used
 - Node.js: A runtime environment for executing JavaScript code on the server-side.
 - Express.js: A minimalist web application framework for Node.js.
