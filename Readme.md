@@ -1,4 +1,4 @@
-# BloggingSite Backend 📝
+# BloggingSite Backend application 📝
 
 ## Table of Contents
 - [Introduction](#introduction)
